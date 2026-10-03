@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product Art Preview</title>
+<style>
+  body { margin: 0; padding: 24px; background: #ffffff; font: 13px/1.4 system-ui, -apple-system, Segoe UI, sans-serif; color: #333; }
+  h2 { font-size: 15px; font-weight: 600; margin: 22px 0 8px; text-transform: capitalize; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .card { width: 220px; height: 220px; background: #f5f4f1; border-radius: 6px; position: relative; }
+  .card svg { width: 100%; height: 100%; display: block; }
+  .card span { position: absolute; left: 8px; bottom: 6px; font-size: 10px; color: #999; }
+</style>
+</head>
+<body>
+<div id="out"></div>
+<script src="js/product-art.js"></script>
+<script>
+  (function () {
+    var params = new URLSearchParams(location.search);
+    var only = params.get('types');
+    var types = only ? only.split(',') : ProductArt.types;
+    var colours = (params.get('colors') || '#ffffff,#1f1f21,#b7c4a3,#2f3b5c,#c9825b,#d8cbb8').split(',');
+    var views = (params.get('views') || 'front,angle').split(',');
+    var html = '';
+    types.forEach(function (t) {
+      html += '<h2>' + t + '</h2>';
+      views.forEach(function (v) {
+        html += '<div class="row" style="margin-bottom:10px">';
+        colours.forEach(function (c) {
+          html += '<div class="card">' + ProductArt.svg(t, { color: c, view: v }) + '<span>' + v + ' ' + c + '</span></div>';
+        });
+        html += '</div>';
+      });
+    });
+    document.getElementById('out').innerHTML = html;
+  })();
+</script>
+</body>
+</html>
